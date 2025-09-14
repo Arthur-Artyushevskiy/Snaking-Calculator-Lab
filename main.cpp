@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <cctype>
+#include <cassert>
 using namespace std;
 
 int applyOp(int total, char op, int num) {
@@ -32,7 +33,7 @@ int evaluate(const vector<string>& program, int row, int col, char op, int total
     else if (ch == '^' || ch == 'v') {
         int newRow = (ch == '^') ? row - 1 : row + 1;
         //program.size()
-        if (newRow >= 0 && newRow < 2) {
+        if (newRow >= 0 && newRow < program.size()) {
             // (Fixed)the issue with this code is that the next operator is not used, in this example "*" is not used for the second row
             savedOp = op;
             int branchResult = evaluate(program, newRow, col, op, total);
@@ -56,13 +57,13 @@ int main(){
         "257*233+6v790-12",
         "61247833212+*9^3"
     };
-    cout << evaluate(program) << endl; // Should return 14107
+    assert(evaluate(program) == 14107);// Should return 14107
     
     vector<string> program_2 = {
         "2+3v1",
         "   *2"
     };
-    cout << evaluate(program_2) << endl;  // Should trace: 2 + 3 = 5 → branch down → *2 = 10 → return → 10 + 1 = 11
+    assert(evaluate(program_2) == 11);  // Should trace: 2 + 3 = 5 → branch down → *2 = 10 → return → 10 + 1 = 11
     
     return 0;
 }
